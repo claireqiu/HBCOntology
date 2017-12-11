@@ -1,0 +1,504 @@
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix bim4hex:  <http://www.ibp.fraunhofer.de/ontologies/bim4hex#> .
+@prefix bot:     <https://w3id.org/bot#> .
+@prefix saref:   <https://w3id.org/saref#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix time4hex:  <http://www.ibp.fraunhofer.de/ontologies/time4hex#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix hex:     <http://www.ibp.fraunhofer.de/ontologies/hex#> .
+@prefix time:    <http://www.w3.org/2006/time#> .
+@prefix exp:     <http://linkedearth.org/experience/ns#> .
+@prefix saref4bldg:  <https://w3id.org/def/saref4bldg#> .
+@prefix dc:      <http://purl.org/dc/elements/1.1/> .
+
+dc:identifier
+      a       owl:AnnotationProperty .
+
+hex:Loud
+      a       owl:Class ;
+      rdfs:comment "Loudness is the subjective perception of  auditory sensation."@en ;
+      rdfs:label "Loud"@en ;
+      rdfs:subClassOf hex:AuditorySensation ;
+      owl:disjointWith hex:Quiet .
+
+hex:IEQFactor
+      a       owl:Class ;
+      rdfs:comment "A concept represents IEQ factors."@en ;
+      rdfs:label "IEQFactor"@en ;
+      rdfs:subClassOf
+              [ a       owl:Restriction ;
+                owl:onProperty hex:hasQuality ;
+                owl:someValuesFrom hex:Quality
+              ] .
+
+hex:AuditorySensation
+      a       owl:Class ;
+      rdfs:comment "Auditory sensation is the experience of sound on ear, which can be loud or quiet."@en ;
+      rdfs:label "AuditorySensation"@en ;
+      rdfs:subClassOf hex:Sensation .
+
+hex:VisualComfort
+      a       owl:Class ;
+      rdfs:comment "Sub-concept of IEQ factor representing visual comfort. It can be described by the combination of quality and visual sensation."@en ;
+      rdfs:label "VisualComfort"@en ;
+      rdfs:subClassOf hex:IEQFactor .
+
+hex:IAQ
+      a       owl:Class ;
+      rdfs:comment "Sub-concept of IEQ factor representing indoor air quality. It can be described by the quality."@en ;
+      rdfs:label "IAQ"@en ;
+      rdfs:subClassOf hex:IEQFactor .
+
+dc:date
+      a       owl:AnnotationProperty .
+
+hex:Quality
+      a       owl:Class ;
+      rdfs:comment "A concept representing the quality of relevant IE factors assessed by occupants."@en ;
+      rdfs:label "Quality"@en .
+
+hex:Cold
+      a       owl:Class ;
+      rdfs:comment "cold is often a subjective perception of thermal sensation."@en ;
+      rdfs:label "Cold"@en ;
+      rdfs:subClassOf hex:ThermalSensation ;
+      owl:disjointWith hex:Warm .
+
+hex:QuietAcousticComfort
+      a       owl:Class ;
+      rdfs:comment "A concepts represents acoustic comfort which has been sensed by occpuants as quiet."@en ;
+      rdfs:label "QuietAcousticComfort"@en ;
+      rdfs:subClassOf hex:AcousticComfort ;
+      owl:equivalentClass
+              [ a       owl:Class ;
+                owl:intersectionOf (hex:AcousticComfort [ a       owl:Restriction ;
+                            owl:onProperty hex:hasAuditorySensation ;
+                            owl:someValuesFrom hex:Quiet
+                          ] [ a       owl:Restriction ;
+                            owl:allValuesFrom hex:Quiet ;
+                            owl:onProperty hex:hasAuditorySensation
+                          ])
+              ] .
+
+hex:NegativeIEQFactor
+      a       owl:Class ;
+      rdfs:comment "A concept represents the IEQ factors which have been assesssed as negative by occupants."@en ;
+      rdfs:label "NegativeIEQFactor"@en ;
+      rdfs:subClassOf hex:IEQFactor .
+
+hex:GoodExperience
+      a       owl:Class ;
+      rdfs:comment "A concept represents expereiences which have all positive IEQ factors."@en ;
+      rdfs:label "GoodExperience"@en ;
+      rdfs:subClassOf exp:Experience ;
+      owl:equivalentClass
+              [ a       owl:Class ;
+                owl:intersectionOf (exp:Experience [ a       owl:Restriction ;
+                            owl:onProperty hex:isAbout ;
+                            owl:someValuesFrom
+                                    [ a       owl:Class ;
+                                      owl:intersectionOf (hex:AcousticComfort hex:PositiveIEQFactor)
+                                    ]
+                          ] [ a       owl:Restriction ;
+                            owl:onProperty hex:isAbout ;
+                            owl:someValuesFrom
+                                    [ a       owl:Class ;
+                                      owl:intersectionOf (hex:IAQ hex:PositiveIEQFactor)
+                                    ]
+                          ] [ a       owl:Restriction ;
+                            owl:onProperty hex:isAbout ;
+                            owl:someValuesFrom
+                                    [ a       owl:Class ;
+                                      owl:intersectionOf (hex:PositiveIEQFactor hex:ThermalComfort)
+                                    ]
+                          ] [ a       owl:Restriction ;
+                            owl:onProperty hex:isAbout ;
+                            owl:someValuesFrom
+                                    [ a       owl:Class ;
+                                      owl:intersectionOf (hex:PositiveIEQFactor hex:VisualComfort)
+                                    ]
+                          ])
+              ] .
+
+hex:VisualSensation
+      a       owl:Class ;
+      rdfs:comment "A concept represents visual sensation which is the experience of light in the eye."@en ;
+      rdfs:label "VisualSensation"@en ;
+      rdfs:subClassOf hex:Sensation .
+
+hex:WarmThermalComfort
+      a       owl:Class ;
+      rdfs:comment "A concepts represents thermal comfort which has been sensed by occpuants as warm."@en ;
+      rdfs:label "WarmThermalComfort"@en ;
+      rdfs:subClassOf hex:ThermalComfort ;
+      owl:equivalentClass
+              [ a       owl:Class ;
+                owl:intersectionOf (hex:ThermalComfort [ a       owl:Restriction ;
+                            owl:onProperty hex:hasThermalSensation ;
+                            owl:someValuesFrom hex:Warm
+                          ] [ a       owl:Restriction ;
+                            owl:allValuesFrom hex:Warm ;
+                            owl:onProperty hex:hasThermalSensation
+                          ])
+              ] .
+
+dc:creator
+      a       owl:AnnotationProperty .
+
+dc:contributor
+      a       owl:AnnotationProperty .
+
+hex:Quiet
+      a       owl:Class ;
+      rdfs:comment "Quietness is the subjective perception of  auditory sensation."@en ;
+      rdfs:label "Quiet"@en ;
+      rdfs:subClassOf hex:AuditorySensation .
+
+<http://www.ibp.fraunhofer.de/ontologies/hex>
+      a       owl:Ontology ;
+      rdfs:comment "The ontology formally represents human experiencse about IEQ factors, such as thermal comfort, visual comfort , acoustic comfort and IAQ (Indoor Air Quality). It can intregate with time ontology and bim4hex."@en ;
+      dc:contributor "Georg Schneider (georg.schneider@ibp.fraunhofer.de)"@en ;
+      dc:creator "Haonan Qiu (haonan.qiu@th-nurenberg.de)"@en ;
+      dc:date "30.11.2017"@en ;
+      dc:description "OWL ontology for human experience which can be integerated with time ontology and building related ontologies."@en ;
+      dc:language "en"@en ;
+      dc:title "Hex Ontology"@en ;
+      owl:versionIRI <http://www.ibp.fraunhofer.de/ontologies/hex_1.0> ;
+      owl:versionInfo "1.0"@en .
+
+hex:LoudAcousticComfort
+      a       owl:Class ;
+      rdfs:comment "A concepts represents acoustic comfort which has been sensed by occpuants as loud."@en ;
+      rdfs:label "LoudAcousticComfort"@en ;
+      rdfs:subClassOf hex:AcousticComfort ;
+      owl:equivalentClass
+              [ a       owl:Class ;
+                owl:intersectionOf (hex:AcousticComfort [ a       owl:Restriction ;
+                            owl:onProperty hex:hasAuditorySensation ;
+                            owl:someValuesFrom hex:Loud
+                          ] [ a       owl:Restriction ;
+                            owl:allValuesFrom hex:Loud ;
+                            owl:onProperty hex:hasAuditorySensation
+                          ])
+              ] .
+
+hex:hasQuality
+      a       owl:ObjectProperty ;
+      rdfs:domain hex:IEQFactor ;
+      rdfs:label "hasQuality"@en ;
+      rdfs:range hex:Quality .
+
+hex:Positive
+      a       owl:Class ;
+      rdfs:comment "A concept represents positive"@en ;
+      rdfs:label "Positive"@en ;
+      rdfs:subClassOf hex:Quality .
+
+hex:withObjectSetting
+      a       owl:ObjectProperty ;
+      rdfs:domain exp:Experience ;
+      rdfs:label "withObjectSetting"@en ;
+      rdfs:range bim4hex:Setting .
+
+[]    a       owl:AllDisjointClasses ;
+      owl:members (hex:AuditorySensation hex:ThermalSensation hex:VisualSensation) .
+
+hex:hasVisualSensation
+      a       owl:FunctionalProperty , owl:ObjectProperty ;
+      rdfs:domain hex:VisualComfort ;
+      rdfs:label "hasVisualSensation"@en ;
+      rdfs:range hex:VisualSensation .
+
+hex:Neutral
+      a       owl:Class ;
+      rdfs:comment "A concept represent neutral"@en ;
+      rdfs:label "Neutral"@en ;
+      rdfs:subClassOf hex:Quality .
+
+dc:title
+      a       owl:AnnotationProperty .
+
+[]    a       owl:AllDisjointClasses ;
+      owl:members (hex:Negative hex:Neutral hex:Positive) .
+
+bim4hex:Setting
+      a       owl:Class ;
+      rdfs:comment "Building objects settings."@en ;
+      rdfs:isDefinedBy "http://www.ibp.fraunhofer.de/ontologies/bim4hex#"@en ;
+      rdfs:label "Setting"@en .
+
+hex:ThermalComfort
+      a       owl:Class ;
+      rdfs:comment "Sub-concept of IEQ factor representing thermal comfort. It can be described by the combination of quality and thermal sensation."@en ;
+      rdfs:label "ThermalComfort"@en ;
+      rdfs:subClassOf hex:IEQFactor .
+
+hex:Sensation
+      a       owl:Class ;
+      rdfs:comment "A concept represents the sensation of human in terms of indoor environment."@en ;
+      rdfs:label "Sensation"@en .
+
+time:Instant
+      a       owl:Class ;
+      rdfs:isDefinedBy "http://www.w3.org/2006/time#"@en ;
+      rdfs:label "Instant"@en .
+
+dc:description
+      a       owl:AnnotationProperty .
+
+hex:BadExperience
+      a       owl:Class ;
+      rdfs:comment "A concept represents expereiences which have all negative IEQ factors."@en ;
+      rdfs:label "BadExperience"@en ;
+      rdfs:subClassOf exp:Experience ;
+      owl:equivalentClass
+              [ a       owl:Class ;
+                owl:intersectionOf (exp:Experience [ a       owl:Restriction ;
+                            owl:onProperty hex:isAbout ;
+                            owl:someValuesFrom
+                                    [ a       owl:Class ;
+                                      owl:intersectionOf (hex:AcousticComfort hex:NegativeIEQFactor)
+                                    ]
+                          ] [ a       owl:Restriction ;
+                            owl:onProperty hex:isAbout ;
+                            owl:someValuesFrom
+                                    [ a       owl:Class ;
+                                      owl:intersectionOf (hex:IAQ hex:NegativeIEQFactor)
+                                    ]
+                          ] [ a       owl:Restriction ;
+                            owl:onProperty hex:isAbout ;
+                            owl:someValuesFrom
+                                    [ a       owl:Class ;
+                                      owl:intersectionOf (hex:NegativeIEQFactor hex:ThermalComfort)
+                                    ]
+                          ] [ a       owl:Restriction ;
+                            owl:onProperty hex:isAbout ;
+                            owl:someValuesFrom
+                                    [ a       owl:Class ;
+                                      owl:intersectionOf (hex:NegativeIEQFactor hex:VisualComfort)
+                                    ]
+                          ])
+              ] .
+
+hex:Warm
+      a       owl:Class ;
+      rdfs:comment "Warm is often a subjective perception of thermal sensation."@en ;
+      rdfs:label "Warm"@en ;
+      rdfs:subClassOf hex:ThermalSensation .
+
+hex:AcousticComfort
+      a       owl:Class ;
+      rdfs:comment "A concept of IEQ factor representing acoustic comfort. It can be described by the combination of quality and acoustic sensation."@en ;
+      rdfs:label "AcousticComfort"@en ;
+      rdfs:subClassOf hex:IEQFactor ;
+      owl:equivalentClass
+              [ a       owl:Class ;
+                owl:intersectionOf (hex:IEQFactor [ a       owl:Restriction ;
+                            owl:onProperty hex:hasAuditorySensation ;
+                            owl:someValuesFrom hex:AuditorySensation
+                          ])
+              ] .
+
+hex:isAbout
+      a       owl:ObjectProperty ;
+      rdfs:domain exp:Experience ;
+      rdfs:label "isAbout"@en ;
+      rdfs:range hex:IEQFactor .
+
+hex:hasAuditorySensation
+      a       owl:FunctionalProperty , owl:ObjectProperty ;
+      rdfs:domain hex:AcousticComfort ;
+      rdfs:label "hasAuditorySensation"@en ;
+      rdfs:range hex:AuditorySensation .
+
+hex:hasThermalSensation
+      a       owl:FunctionalProperty , owl:ObjectProperty ;
+      rdfs:domain hex:ThermalComfort ;
+      rdfs:label "hasThermalSensation"@en ;
+      rdfs:range hex:ThermalSensation .
+
+hex:NeutralIEQFactor
+      a       owl:Class ;
+      rdfs:comment "A concept represents the IEQ factors which have been assesssed as neutral by occupants."@en ;
+      rdfs:label "NeutralIEQFactor"@en ;
+      rdfs:subClassOf hex:IEQFactor .
+
+exp:hasTime
+      a       owl:ObjectProperty ;
+      rdfs:label "hasTime"@en .
+
+saref4bldg:BuildingSpace
+      a       owl:Class ;
+      rdfs:isDefinedBy "https://w3id.org/def/saref4bldg#"@en ;
+      rdfs:label "BuildingSpace"@en .
+
+hex:Bright
+      a       owl:Class ;
+      rdfs:comment "A cocept describes that people experience light as bright."@en ;
+      rdfs:label "Bright"@en ;
+      rdfs:subClassOf hex:VisualSensation ;
+      owl:disjointWith hex:Dim .
+
+exp:hasLocation
+      a       owl:FunctionalProperty , owl:ObjectProperty ;
+      rdfs:domain exp:Experience ;
+      rdfs:label "hasLocation"@en ;
+      rdfs:range saref4bldg:BuildingSpace .
+
+exp:Experience
+      a       owl:Class ;
+      rdfs:comment "A concpet desicrbes occupants perspectives of indoor environemental quality."@en ;
+      rdfs:label "Experience"@en ;
+      rdfs:subClassOf
+              [ a       owl:Restriction ;
+                owl:maxQualifiedCardinality
+                        "1"^^xsd:nonNegativeInteger ;
+                owl:onClass hex:AcousticComfort ;
+                owl:onProperty hex:isAbout
+              ] ;
+      rdfs:subClassOf
+              [ a       owl:Restriction ;
+                owl:maxQualifiedCardinality
+                        "1"^^xsd:nonNegativeInteger ;
+                owl:onClass hex:IAQ ;
+                owl:onProperty hex:isAbout
+              ] ;
+      rdfs:subClassOf
+              [ a       owl:Restriction ;
+                owl:maxQualifiedCardinality
+                        "1"^^xsd:nonNegativeInteger ;
+                owl:onClass hex:ThermalComfort ;
+                owl:onProperty hex:isAbout
+              ] ;
+      rdfs:subClassOf
+              [ a       owl:Restriction ;
+                owl:maxQualifiedCardinality
+                        "1"^^xsd:nonNegativeInteger ;
+                owl:onClass hex:VisualComfort ;
+                owl:onProperty hex:isAbout
+              ] ;
+      rdfs:subClassOf
+              [ a       owl:Restriction ;
+                owl:onProperty hex:withObjectSetting ;
+                owl:someValuesFrom bim4hex:Setting
+              ] ;
+      rdfs:subClassOf
+              [ a       owl:Restriction ;
+                owl:onProperty exp:hasLocation ;
+                owl:someValuesFrom saref4bldg:BuildingSpace
+              ] ;
+      rdfs:subClassOf
+              [ a       owl:Restriction ;
+                owl:onProperty exp:hasTime ;
+                owl:someValuesFrom time:Instant
+              ] .
+
+hex:DimVisualComfort
+      a       owl:Class ;
+      rdfs:comment "A concept represents those visual comfort which has been sensed as dim by occupants."@en ;
+      rdfs:label "DimVisualComfort"@en ;
+      rdfs:subClassOf hex:VisualComfort ;
+      owl:equivalentClass
+              [ a       owl:Class ;
+                owl:intersectionOf (hex:VisualComfort [ a       owl:Restriction ;
+                            owl:onProperty hex:hasVisualSensation ;
+                            owl:someValuesFrom hex:Dim
+                          ] [ a       owl:Restriction ;
+                            owl:allValuesFrom hex:Dim ;
+                            owl:onProperty hex:hasVisualSensation
+                          ])
+              ] .
+
+hex:Dim
+      a       owl:Class ;
+      rdfs:comment "A cocept describes that people experience light as dim."@en ;
+      rdfs:label "Dim"@en ;
+      rdfs:subClassOf hex:VisualSensation .
+
+hex:ThermalSensation
+      a       owl:Class ;
+      rdfs:comment "Thermal sensation is a concept representing  how people ’feel’ and would typically classify their thermal states using words such as warm and cold."@en ;
+      rdfs:label "ThermalSensation"@en ;
+      rdfs:subClassOf hex:Sensation .
+
+dc:language
+      a       owl:AnnotationProperty .
+
+hex:NeutralExperience
+      a       owl:Class ;
+      rdfs:comment "A concept represents expereiences which have all neutral IEQ factors."@en ;
+      rdfs:label "NeutralExperience"@en ;
+      rdfs:subClassOf exp:Experience ;
+      owl:equivalentClass
+              [ a       owl:Class ;
+                owl:intersectionOf (exp:Experience [ a       owl:Restriction ;
+                            owl:onProperty hex:isAbout ;
+                            owl:someValuesFrom
+                                    [ a       owl:Class ;
+                                      owl:intersectionOf (hex:AcousticComfort hex:NeutralIEQFactor)
+                                    ]
+                          ] [ a       owl:Restriction ;
+                            owl:onProperty hex:isAbout ;
+                            owl:someValuesFrom
+                                    [ a       owl:Class ;
+                                      owl:intersectionOf (hex:IAQ hex:NeutralIEQFactor)
+                                    ]
+                          ] [ a       owl:Restriction ;
+                            owl:onProperty hex:isAbout ;
+                            owl:someValuesFrom
+                                    [ a       owl:Class ;
+                                      owl:intersectionOf (hex:NeutralIEQFactor hex:ThermalComfort)
+                                    ]
+                          ] [ a       owl:Restriction ;
+                            owl:onProperty hex:isAbout ;
+                            owl:someValuesFrom
+                                    [ a       owl:Class ;
+                                      owl:intersectionOf (hex:NeutralIEQFactor hex:VisualComfort)
+                                    ]
+                          ])
+              ] .
+
+hex:BrightVisualComfort
+      a       owl:Class ;
+      rdfs:comment "A concept represents those visual comfort which has been sensed as birght by occupants."@en ;
+      rdfs:label "BrightVisualComfort"@en ;
+      rdfs:subClassOf hex:VisualComfort ;
+      owl:equivalentClass
+              [ a       owl:Class ;
+                owl:intersectionOf (hex:VisualComfort [ a       owl:Restriction ;
+                            owl:onProperty hex:hasVisualSensation ;
+                            owl:someValuesFrom hex:Bright
+                          ] [ a       owl:Restriction ;
+                            owl:allValuesFrom hex:Bright ;
+                            owl:onProperty hex:hasVisualSensation
+                          ])
+              ] .
+
+hex:PositiveIEQFactor
+      a       owl:Class ;
+      rdfs:comment "A concept represents the IEQ factors which have been assesssed as positive by occupants."@en ;
+      rdfs:label "PositiveIEQFactor"@en ;
+      rdfs:subClassOf hex:IEQFactor .
+
+hex:ColdThermalComfort
+      a       owl:Class ;
+      rdfs:comment "A concepts represents thermal comfort which has been sensed by occpuants as cold."@en ;
+      rdfs:label "ColdThermalComfort"@en ;
+      rdfs:subClassOf hex:ThermalComfort ;
+      owl:equivalentClass
+              [ a       owl:Class ;
+                owl:intersectionOf (hex:ThermalComfort [ a       owl:Restriction ;
+                            owl:onProperty hex:hasThermalSensation ;
+                            owl:someValuesFrom hex:Cold
+                          ] [ a       owl:Restriction ;
+                            owl:allValuesFrom hex:Cold ;
+                            owl:onProperty hex:hasThermalSensation
+                          ])
+              ] .
+
+hex:Negative
+      a       owl:Class ;
+      rdfs:comment "A concept represents negative."@en ;
+      rdfs:label "Negative"@en ;
+      rdfs:subClassOf hex:Quality .
